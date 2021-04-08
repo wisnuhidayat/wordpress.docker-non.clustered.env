@@ -39,7 +39,7 @@ docker-ce-selinux.noarch 17.03.3.ce-1.el7 docker-ce-stable
 …
 podman-docker.noarch 1.4.4-4.el7.centos extras
 …#
-yum install docker-ce
+yum install docker-ce   
 …
 Dependencies Resolved
 ===============================================================================================
@@ -55,6 +55,9 @@ Transaction Summary
 ===============================================================================================
 Install 1 Package (+3 Dependent packages)
 …
+
+==== Jika ada error gunakan command yum install docker-ce --allowerasing
+
 # rpm -qa|grep docker
 docker-ce-cli-19.03.8-3.el7.x86_64
 docker-ce-19.03.8-3.el7.x86_64
