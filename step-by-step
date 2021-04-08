@@ -220,6 +220,8 @@ docker container run -d \
 -v /root/var/lib/mysql:/var/lib/mysql \
 --network mariadb-wp-privnet \
 mariadb
+
+
 # vi run_wordpress_with_persistent_volume_and_published_port.sh
 #!/bin/bash
 docker container run -d \
@@ -232,12 +234,21 @@ docker container run -d \
 --network mariadb-wp-privnet \
 -p 80:80 \
 wordpress
+
+
 # chmod +x run_mariadb_with_persistent_volume_and_private_network.sh
+
 # chmod +x run_wordpress_with_persistent_volume_and_published_port.sh
+
+
 # ./run_mariadb_with_persistent_volume_and_private_network.sh
 b596071feb0035fa3590860bc979a0769141a2de8b080235722ce0b2f1b3345c
+
+
 # ./run_wordpress_with_persistent_volume_and_published_port.sh
 10f0489842c8887aba174399af3cb308885ae32cdc3e0603638192f250eee48a
+
+
 # docker container ls
 CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
 10f0489842c8 wordpress "docker-entrypoint.s…" 2 seconds ago Up 2 seconds 0.0.0.0:80->80/tcp wordpress
@@ -249,8 +260,12 @@ b596071feb00 mariadb "docker-entrypoint.s…" 28 second ago Up 28 seconds 3306/t
 # firewall-cmd --get-active-zones
 public
 interfaces: ens33
+
+
 # firewall-cmd --list-services
 dhcpv6-client ssh
+
+
 # firewall-cmd --permanent --add-service=http
 # firewall-cmd –reload
 # firewall-cmd --list-services
