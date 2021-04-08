@@ -257,7 +257,7 @@ interfaces: ens33
 # firewall-cmd --list-services
 dhcpv6-client ssh
 # firewall-cmd --permanent --add-service=http
-# firewall-cmd –reload
+# firewall-cmd --reload
 # firewall-cmd --list-services
 dhcpv6-client http ssh
 
