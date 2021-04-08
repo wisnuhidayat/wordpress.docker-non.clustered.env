@@ -289,6 +289,16 @@ firewall-cmd --list-services
 curl -L http://localhost
 
 
+# chmod +x grade-project2-docker.sh
+
+# ./grade-project2-docker.sh > YourFullName-YourRegistrationID-project2.txt 2>&1
+
+# cat YourFullName-YourRegistrationID-project2.txt
+
+
+
+
+
 
 
 
