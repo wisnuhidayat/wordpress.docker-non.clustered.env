@@ -289,6 +289,18 @@ firewall-cmd --list-services
 curl -L http://localhost
 
 
+===Jika ada masalah error established database connection ====
+
+# docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' wordpressdb
+
+172.18.0.2
+
+kmudian 
+setelah dapat ip nya  saya tambahkan di /etc/hosts
+# vi /etc/hosts
+
+172.18.0.2  wordpressdb
+
 # chmod +x grade-project2-docker.sh
 
 # ./grade-project2-docker.sh > YourFullName-YourRegistrationID-project2.txt 2>&1
