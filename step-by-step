@@ -1,0 +1,271 @@
+======  Deploying WordPress as Docker Containerized Application on Non-clustered Environment =========
+
+
+# yum clean all
+# yum repolist
+# yum update
+
+# setenforce 0
+# getenforce
+# sestatus
+# vi /etc/selinux/config
+SELINUX=permissive
+
+
+
+# wget https://download.docker.com/linux/centos/docker-ce.repo
+# ls
+docker-ce.repo
+# cp docker-ce.repo /etc/yum.repos.d/
+# yum repolist
+…
+docker-ce-stable | 3.5 kB 00:00
+(1/2): docker-ce-stable/x86_64/primary_db | 41 kB 00:00
+(2/2): docker-ce-stable/x86_64/updateinfo | 55 B 00:00
+repo id repo name status
+base/7/x86_64 CentOS-7 - Base 10,097
+docker-ce-stable/x86_64 Docker CE Stable - x86_64 70
+extras/7/x86_64 CentOS-7 - Extras 341
+updates/7/x86_64 CentOS-7 - Updates 1,787
+repolist: 12,295
+
+
+# yum list|grep docker
+…
+docker.x86_64 2:1.13.1-109.gitcccb291.el7.centos
+docker-ce.x86_64 3:19.03.8-3.el7 docker-ce-stable
+docker-ce-cli.x86_64 1:19.03.8-3.el7 docker-ce-stable
+docker-ce-selinux.noarch 17.03.3.ce-1.el7 docker-ce-stable
+…
+podman-docker.noarch 1.4.4-4.el7.centos extras
+…#
+yum install docker-ce
+…
+Dependencies Resolved
+===============================================================================================
+Package Arch Version Repository Size
+===============================================================================================
+Installing:
+docker-ce x86_64 3:19.03.8-3.el7 docker-ce-stable 25 M
+Installing for dependencies:
+container-selinux noarch 2:2.107-3.el7 extras 39 k
+containerd.io x86_64 1.2.13-3.1.el7 docker-ce-stable 23 M
+docker-ce-cli x86_64 1:19.03.8-3.el7 docker-ce-stable 40 M
+Transaction Summary
+===============================================================================================
+Install 1 Package (+3 Dependent packages)
+…
+# rpm -qa|grep docker
+docker-ce-cli-19.03.8-3.el7.x86_64
+docker-ce-19.03.8-3.el7.x86_64
+# rpm -ql docker-ce|grep systemd
+/usr/lib/systemd/system/docker.service
+/usr/lib/systemd/system/docker.socket
+# systemctl enable docker.service
+Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to
+/usr/lib/systemd/system/docker.service
+# systemctl start docker.service
+# systemctl status docker
+● docker.service - Docker Application Container Engine
+Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; vendor preset: disabled)
+Active: active (running) since Sun 2020-04-12 19:44:11 WIB; 6min ago
+Docs: https://docs.docker.com
+Main PID: 1426 (dockerd)
+Tasks: 12
+Memory: 130.4M
+CGroup: /system.slice/docker.service
+└─1426 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+Apr 12 19:44:09 myserver2.mydomain.com dockerd[1426]: time="2020-04-
+12T19:44:09.669644698+07:00" level=info msg="ccResolverWrapper: sending update to cc:
+{[{unix:///run/containerd/containerd.sock..." module=grpc
+…
+
+
+
+# docker search hello
+NAME DESCRIPTION STARS OFFICIAL AUTOMATED
+hello-world Hello World! (an example of minimal Dockeriz… 1161 [OK]
+…
+# docker pull hello-world
+Using default tag: latest
+latest: Pulling from library/hello-world
+1b930d010525: Pull complete
+Digest: sha256:f9dfddf63636d84ef479d645ab5885156ae030f611a56f3a7ac7f2fdd86d7e4e
+Status: Downloaded newer image for hello-world:latest
+docker.io/library/hello-world:latest
+# docker image ls
+REPOSITORY TAG IMAGE ID CREATED SIZE
+hello-world latest fce289e99eb9 15 months ago 1.84kB
+# docker container run hello-world
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+To generate this message, Docker took the following steps:
+1. The Docker client contacted the Docker daemon.
+2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+(amd64)
+3. The Docker daemon created a new container from that image which runs the
+executable that produces the output you are currently reading.
+4. The Docker daemon streamed that output to the Docker client, which sent it
+to your terminal.
+To try something more ambitious, you can run an Ubuntu container with:
+$ docker run -it ubuntu bash
+Share images, automate workflows, and more with a free Docker ID:
+https://hub.docker.com/
+For more examples and ideas, visit:
+https://docs.docker.com/get-started/
+
+
+
+# docker search mariadb
+NAME DESCRIPTION STARS
+OFFICIAL AUTOMATED
+mariadb MariaDB is a community-developed fork of MyS… 3362
+[OK]
+# docker pull mariadb
+Using default tag: latest
+latest: Pulling from library/mariadb
+5bed26d33875: Pull complete
+f11b29a9c730: Pull complete
+930bda195c84: Pull complete
+78bf9a5ad49e: Pull complete
+e9e3c043ec68: Pull complete
+141e45c6af4b: Pull complete
+a26245908a82: Pull complete
+40ccaf895c8a: Pull complete
+2d665f60c94a: Pull complete
+c7bcd9961bee: Pull complete
+80f1ddb594ce: Pull complete
+0647ec428f9f: Pull complete
+9cb6e30e72ca: Pull complete
+60890c0035d8: Pull complete
+Digest: sha256:d0e2c681c41e91aba6e9c8c0a588eedd48291a70464e83c40da2e3de01998eef
+Status: Downloaded newer image for mariadb:latest
+docker.io/library/mariadb:latest
+# docker search wordpress
+NAME DESCRIPTION STARS
+OFFICIAL AUTOMATED
+wordpress The WordPress rich content management system… 3454
+[OK]
+…
+# docker pull wordpress
+Using default tag: latest
+latest: Pulling from library/wordpress
+c499e6d256d6: Pull complete
+3a635b94b3b9: Pull complete
+cf28be682a33: Pull complete
+b7118ab6e551: Pull complete
+925f628a16b8: Pull complete
+a77cff9973b5: Pull complete
+..
+6b1397000eb2: Pull complete
+7b387d8d3957: Pull complete
+04673b988ee3: Pull complete
+0e2da6305da6: Pull complete
+f0224352bc00: Pull complete
+d5e8b4e26a84: Pull complete
+Digest: sha256:191d5caf4ef5b8c57721ade777820f3267654325f7902b2ccd377ceeba1c3fe2
+Status: Downloaded newer image for wordpress:latest
+docker.io/library/wordpress:latest
+# docker image ls
+REPOSITORY TAG IMAGE ID CREATED SIZE
+wordpress latest 0d205d4886fe 11 days ago 540MB
+mariadb latest 37f5f0a258bf 3 weeks ago 356MB
+hello-world latest fce289e99eb9 15 months ago 1.84kB
+
+
+
+# mkdir -p /root/var/lib/mysql
+# mkdir -p /root/var/www/html
+# ls -lR var
+var:
+total 0
+drwxr-xr-x. 3 root root 19 Apr 13 06:38 lib
+drwxr-xr-x. 3 root root 18 Apr 13 06:38 www
+var/lib:
+total 0
+drwxr-xr-x. 2 root root 6 Apr 13 06:38 mysql
+var/lib/mysql:
+total 0
+var/www:
+total 0
+drwxr-xr-x. 2 root root 6 Apr 13 06:38 html
+var/www/html:
+total 0
+
+
+# docker network ls
+NETWORK ID NAME DRIVER SCOPE
+ceb9d2e9cbad bridge bridge local
+9d3c1b497be8 host host local
+9da389311d9e none null local
+# docker network create --attachable mariadb-wp-privnet
+90f36038fcaf6c19c598d0a7a6ddcc902d0af6f59dd2cdfed1e1df2d35eff02e
+# docker network ls
+NETWORK ID NAME DRIVER SCOPE
+ceb9d2e9cbad bridge bridge local
+9d3c1b497be8 host host local
+90f36038fcaf mariadb-wp-privnet bridge local
+9da389311d9e none null local
+
+
+
+# vi run_mariadb_with_persistent_volume_and_private_network.sh
+#!/bin/bash
+docker container run -d \
+--name wordpressdb \
+-e MYSQL_ROOT_PASSWORD='redhat' \
+-e MYSQL_DATABASE='wordpress' \
+-e MYSQL_USER='wordpress' \
+-e MYSQL_PASSWORD='redhat' \
+-v /root/var/lib/mysql:/var/lib/mysql \
+--network mariadb-wp-privnet \
+mariadb
+# vi run_wordpress_with_persistent_volume_and_published_port.sh
+#!/bin/bash
+docker container run -d \
+--name wordpress \
+-e WORDPRESS_DB_HOST=wordpressdb \
+-e WORDPRESS_DB_USER='wordpress' \
+-e WORDPRESS_DB_PASSWORD='redhat' \
+-e WORDPRESS_DB_NAME='wordpress' \
+-v /root/var/www/html:/var/www/html \
+--network mariadb-wp-privnet \
+-p 80:80 \
+wordpress
+# chmod +x run_mariadb_with_persistent_volume_and_private_network.sh
+# chmod +x run_wordpress_with_persistent_volume_and_published_port.sh
+# ./run_mariadb_with_persistent_volume_and_private_network.sh
+b596071feb0035fa3590860bc979a0769141a2de8b080235722ce0b2f1b3345c
+# ./run_wordpress_with_persistent_volume_and_published_port.sh
+10f0489842c8887aba174399af3cb308885ae32cdc3e0603638192f250eee48a
+# docker container ls
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+10f0489842c8 wordpress "docker-entrypoint.s…" 2 seconds ago Up 2 seconds 0.0.0.0:80->80/tcp wordpress
+b596071feb00 mariadb "docker-entrypoint.s…" 28 second ago Up 28 seconds 3306/tcp wordpressdb
+
+
+
+
+# firewall-cmd --get-active-zones
+public
+interfaces: ens33
+# firewall-cmd --list-services
+dhcpv6-client ssh
+# firewall-cmd --permanent --add-service=http
+# firewall-cmd –reload
+# firewall-cmd --list-services
+dhcpv6-client http ssh
+
+
+
+# curl -L http://localhost|grep -i welcome
+…
+<h1>Welcome</h1>
+<p>Welcome to the famous five-minute WordPress installation process! Just fill in the
+information below and you&#8217;ll be on your way to using the most extendable and powerful
+personal publishing platform in the world.</p>
+…
+
+
+
+
